@@ -1,11 +1,13 @@
 const express = require('express');
+const path = require('path');
 const app = express();
+const port = process.env.PORT || 5000;
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+app.get("/", (req, res) => {
+	res.sendFile(path.join(__dirname, "../client/react", "index.html"));
 });
 
-var server = app.listen(3000, function () {
+var server = app.listen(port, function () {
   var port = server.address().port;
 
   console.log('Server is working : PORT - ' + port);
