@@ -4,12 +4,16 @@
   "description": "<p align=\"center\">   <br>   <img src=\"./images/common/logo-sample.jpeg\">   <br> </p>",
   "main": "index.js",
   "scripts": {
-	"start": "node srcs/index.js",
+    "start": "node srcs/index.js",
+	"dev": "nodemon srcs/index.js",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
