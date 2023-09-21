@@ -1,17 +1,19 @@
 {
-  "name": "crush_backend",
-  "version": "1.0.0",
-  "description": "<p align=\"center\">   <br>   <img src=\"./images/common/logo-sample.jpeg\">   <br> </p>",
-  "main": "index.js",
+  "name": "crush-backend",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "node srcs/index.js",
-	"dev": "nodemon srcs/index.js",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "start": "node ./bin/www",
+	"dev": "nodemon ./bin/www",
+	"test": "echo \"Error: no test specified\""
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
