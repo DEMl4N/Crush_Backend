@@ -19,11 +19,22 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /home/minskim3/Crush_Backend
+
           git checkout main
           git fetch --all
           git reset --hard origin/main
           git pull origin main
-          sudo docker stop nodejs
-          sudo docker rm nodejs
-          sudo docker build -t crush .
-          sudo docker run -d -p 80:80 --name nodejs crush
+
+          NODEJS=`docker ps | grep -F 'nodejs' | awk -F '   ' '{print $7}'`
+
+          if [ "$NODEJS" != "nodejs" ]
+          then
+            echo "[ nodejs is not running ]"
+            echo "[ run nodejs ]"
+            docker build -t crush .
+            docker run -d -p 80:80 --name nodejs -v /home/minskim3/Crush_Backend:/backend crush
+          else
+            echo "[ nodejs is running ]"
+            echo "[ restart nodejs ]"
+            docker restart nodejs
+          fi
