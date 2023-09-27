@@ -6,9 +6,10 @@ const options = {
     title: 'TEST API Docs',
     description: 'test api 문서입니다',
   },
+  host: 'localhost:8080',
   servers: [
     {
-      url: 'http://localhost:3000',
+      url: 'http://localhost:8080',
     },
   ],
   schemes: ['http'],
