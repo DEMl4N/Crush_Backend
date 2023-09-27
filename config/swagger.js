@@ -7,10 +7,10 @@ const options = {
     title: 'TEST API Docs',
     description: 'test api 문서입니다',
   },
-  host: process.env.HOST || 'localhost:8080',
+  host: `${process.env.HOST}:${process.env.PORT}` || 'localhost:8080',
   servers: [
     {
-      url: `http://${process.env.HOST}` || 'http://localhost:8080',
+      url: `http://${process.env.HOST}:${process.env.PORT}` || 'http://localhost:8080',
     },
   ],
   schemes: ['http'],
