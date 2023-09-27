@@ -32,7 +32,7 @@ jobs:
             echo "[ nodejs is not running ]"
             echo "[ run nodejs ]"
             docker build -t crush .
-            docker run -d -p ${{ secrets.NODE_PORT }} --name nodejs -v /home/minskim3/Crush_Backend:/backend crush
+            docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs -v /home/minskim3/Crush_Backend:/backend crush
           else
             echo "[ nodejs is running ]"
             echo "[ restart nodejs ]"
