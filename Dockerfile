@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:20.7-alpine
 
 RUN mkdir backend
 WORKDIR /backend
