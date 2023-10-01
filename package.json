@@ -16,9 +16,13 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
+    "mongoose": "^7.5.3",
+    "jsonwebtoken": "^9.0.2",
     "morgan": "~1.9.1",
-	"swagger-autogen": "^2.23.6",
-	"swagger-ui-express": "^5.0.0"
+    "swagger-autogen": "^2.23.6",
+    "swagger-ui-express": "^5.0.0",
+    "winston": "^3.10.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "eslint": "^8.50.0",
