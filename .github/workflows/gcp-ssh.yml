@@ -25,16 +25,14 @@ jobs:
             git reset --hard origin/main
             git pull origin main
 
-            NODEJS=`docker ps | grep -F 'nodejs' | awk -F '   ' '{print $7}'`
-
-            if [ "$NODEJS" != "nodejs" ]
+            if [ "$(docker ps -aq -f name=nodejs)" ]
             then
+              echo "[ nodejs is running ]"
+              echo "[ restart nodejs ]"
+              docker restart nodejs
+            else
               echo "[ nodejs is not running ]"
               echo "[ run nodejs ]"
               docker build -t crush .
               docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs -v /home/minskim3/Crush_Backend:/backend crush
-            else
-              echo "[ nodejs is running ]"
-              echo "[ restart nodejs ]"
-              docker restart nodejs
             fi
