@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 30
+    },
+    "auditLog": "/home/feedbaek/Crush_Backend/logs/error/.b374f5aa787b152994d65ece6ce59356711a0b2c-audit.json",
+    "files": [
+        {
+            "date": 1696157784355,
+            "name": "/home/feedbaek/Crush_Backend/logs/error/2023-10-01.error.log",
+            "hash": "9533d86f70d9dfc3b502572d4f66916192baba48cb4c5819f38dc5169f0009e2"
+        }
+    ],
+    "hashType": "sha256"
+}

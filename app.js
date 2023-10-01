@@ -5,10 +5,10 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 // router 모듈 추가
-const indexRouter = require('./routes/index');
-const userRouter = require('./routes/user');
-const loginRouter = require('./routes/login');
-const dbTest = require('./routes/dbTest');
+const indexRouter = require('./controller/index');
+const userRouter = require('./controller/user');
+const loginRouter = require('./controller/login');
+const dbTest = require('./controller/dbTest');
 
 // swagger 설정 추가
 // eslint-disable-next-line import/order, import/no-extraneous-dependencies
@@ -16,7 +16,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./config/swagger-output.json');
 
 // mongoose 불러오기
-const { mongoose } = require('./database/mongoose')
+const { mongoose } = require('./database/mongoose');
 
 const app = express();
 
