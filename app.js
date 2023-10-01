@@ -8,11 +8,15 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const loginRouter = require('./routes/login');
+const dbTest = require('./routes/dbTest');
 
 // swagger 설정 추가
 // eslint-disable-next-line import/order, import/no-extraneous-dependencies
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./config/swagger-output.json');
+
+// mongoose 불러오기
+const { mongoose } = require('./database/mongoose')
 
 const app = express();
 
@@ -30,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
+app.use('/dbTest', dbTest);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile, { explorer: true }));
 
 // catch 404 and forward to error handler
