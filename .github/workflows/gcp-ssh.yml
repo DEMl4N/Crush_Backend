@@ -2,39 +2,39 @@ name: Deploy to GCP Instance using SSH
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using ssh key
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        passphrase: ${{ secrets.PASSPHRASE }}
-        port: ${{ secrets.PORT }}
-        script: |
-          cd /home/minskim3/Crush_Backend
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/minskim3/Crush_Backend
 
-          git checkout main
-          git fetch --all
-          git reset --hard origin/main
-          git pull origin main
+            git checkout main
+            git fetch --all
+            git reset --hard origin/main
+            git pull origin main
 
-          NODEJS=`docker ps | grep -F 'nodejs' | awk -F '   ' '{print $7}'`
+            NODEJS=`docker ps | grep -F 'nodejs' | awk -F '   ' '{print $7}'`
 
-          if [ "$NODEJS" != "nodejs" ]
-          then
-            echo "[ nodejs is not running ]"
-            echo "[ run nodejs ]"
-            docker build -t crush .
-            docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs -v /home/minskim3/Crush_Backend:/backend crush
-          else
-            echo "[ nodejs is running ]"
-            echo "[ restart nodejs ]"
-            docker restart nodejs
-          fi
+            if [ "$NODEJS" != "nodejs" ]
+            then
+              echo "[ nodejs is not running ]"
+              echo "[ run nodejs ]"
+              docker build -t crush .
+              docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs -v /home/minskim3/Crush_Backend:/backend crush
+            else
+              echo "[ nodejs is running ]"
+              echo "[ restart nodejs ]"
+              docker restart nodejs
+            fi

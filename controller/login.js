@@ -1,5 +1,5 @@
 const express = require('express');
-const service = require('../service/login_service');
+const jwtService = require('../service/jwt');
 const logger = require('../config/logger');
 
 const router = express.Router();
@@ -41,13 +41,13 @@ router.post('/test', (req, res) => {
     return res.status(400).send('존재하지 않는 유저입니다.');
   }
   // todo: 여기는 나중에 DB로 로그인 로직을 구현하면 됩니다.
-  //  service.login(username, password);
+  //  OauthService.login(username, password);
 
   // jwt 토큰 발급
   const secret = process.env.SECRET_KEY ? process.env.SECRET_KEY : 'secretKey';
   // 받은 요청에서 db의 데이터를 가져온다 (로그인정보)
   const id = '1'; // todo: db에서 가져온 id로 바꿔야 함
-  const token = service.accessToken(id, secret);
+  const token = jwtService.accessToken(id, secret);
 
   // response
   return res.status(200).json({

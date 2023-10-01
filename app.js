@@ -16,7 +16,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./config/swagger-output.json');
 
 // mongoose 불러오기
-const { mongoose } = require('./database/mongoose');
+const mongoose = require('./database/mongoose');
 
 const app = express();
 

@@ -1,10 +1,6 @@
 // Desc: 로그인 서비스
 const jwt = require('jsonwebtoken');
 
-function login(username, password) {
-  //  여기에 로그인 로직 구현
-}
-
 function accessToken(id, secret) {
   // jwt.sign(payload, secretOrPrivateKey, [options, callback])
   const payload = {
@@ -44,7 +40,6 @@ function refreshToken(token, secret) {
 }
 
 module.exports = {
-  login,
   accessToken,
   refreshToken,
   verifyToken
