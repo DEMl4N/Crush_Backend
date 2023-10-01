@@ -5,9 +5,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
 // router 모듈 추가
-const indexRouter = require('./routes/index');
-const userRouter = require('./routes/user');
-const loginRouter = require('./routes/login');
+const indexRouter = require('./controller/index_controller');
+const userRouter = require('./controller/user_controller');
+const loginRouter = require('./controller/login_controller');
 
 // swagger 설정 추가
 // eslint-disable-next-line import/order, import/no-extraneous-dependencies

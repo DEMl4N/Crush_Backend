@@ -5,13 +5,19 @@ require('dotenv').config();
 const options = {
   info: {
     title: 'TEST API Docs',
-    description: 'test api 문서입니다',
+    description: 'test api 문서입니다'
   },
-  host: `${process.env.HOST}:${process.env.PORT}` || 'localhost:8080',
+  host:
+    process.env.HOST && process.env.PORT
+      ? `${process.env.HOST}:${process.env.PORT}`
+      : 'localhost:8080',
   servers: [
     {
-      url: `http://${process.env.HOST}:${process.env.PORT}` || 'http://localhost:8080',
-    },
+      url:
+        process.env.HOST && process.env.PORT
+          ? `http://${process.env.HOST}:${process.env.PORT}`
+          : 'http://localhost:8080'
+    }
   ],
   schemes: ['http'],
   securityDefinitions: {
@@ -19,9 +25,9 @@ const options = {
       type: 'http',
       scheme: 'bearer',
       in: 'header',
-      bearerFormat: 'JWT',
-    },
-  },
+      bearerFormat: 'JWT'
+    }
+  }
 };
 
 const outputFile = './swagger-output.json';
