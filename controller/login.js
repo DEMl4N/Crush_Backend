@@ -61,14 +61,16 @@ function create_user(user_info) {
 
 router.post('/', (req, res) => {
   const { Authorization } = req.headers;
-  const jwt = Authorization.split(' ')[1];
-  const secret = process.env.SECRET_KEY;
-  const ret = jwtService.verifyToken(jwt, secret);
-  if (ret.ok) {
-    return res.status(200).json({
-      code: 200,
-      message: 'token is valid'
-    });
+  if (Authorization) {
+    const jwt = Authorization.split(' ')[1];
+    const secret = process.env.SECRET_KEY;
+    const ret = jwtService.verifyToken(jwt, secret);
+    if (ret.ok) {
+      return res.status(200).json({
+        code: 200,
+        message: 'token is valid'
+      });
+    }
   }
   const { refresh_token } = req.body;
   const refresh_ret = jwtService.verifyToken(refresh_token, secret);
@@ -80,6 +82,13 @@ router.post('/', (req, res) => {
         message: 'user not found'
       });
     }
+    const new_token = jwtService.accessToken(user.id, secret);
+    return res.status(200).json({
+      code: 200,
+      message: 'token is created',
+      access_token: new_token,
+      refresh_token
+    });
   }
   return res.status(401).json({
     code: 401,
