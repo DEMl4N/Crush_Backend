@@ -20,8 +20,8 @@ function verifyToken(token, secret) {
     const decoded = jwt.verify(token, secret);
     return {
       ok: true,
-      id: decoded.id,
-      role: decoded.role
+      id: decoded.id
+      // role: decoded.role
     };
   } catch (err) {
     return {
@@ -31,8 +31,12 @@ function verifyToken(token, secret) {
   }
 }
 
-function refreshToken(token, secret) {
-  return jwt.sign({}, secret, {
+function refreshToken(id, secret) {
+  const payload = {
+    // refresh token에 들어갈 payload
+    id
+  };
+  return jwt.sign(payload, secret, {
     // refresh token은 payload 없이 발급
     algorithm: 'HS256',
     expiresIn: '14d'
