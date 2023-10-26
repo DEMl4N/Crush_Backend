@@ -13,10 +13,9 @@ const dbTest = require('./controller/dbTest');
 // swagger 설정 추가
 // eslint-disable-next-line import/order, import/no-extraneous-dependencies
 const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('./config/swagger-output.json');
-
-// mongoose 불러오기
-const mongoose = require('./database/mongoose');
+const YAML = require('yamljs');
+const swaggerSpec = YAML.load(path.join(__dirname, './build/swagger.yaml'))
+//const swaggerFile = require('./config/swagger-output.json');
 
 const app = express();
 
@@ -35,7 +34,7 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
 app.use('/dbTest', dbTest);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile, { explorer: true }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

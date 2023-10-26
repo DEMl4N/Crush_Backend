@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: CRUSH API docs
+  description: CRUSH SERVER SEMINAR
+  license:
+    name: minskim2
+servers:
+  - url: http://localhost:8080/
+  - url: http://34.64.96.158:8080/
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters: null
+  #Schemas : model 정보
+  schemas:
+    user:
+      properties:
+        name:
+          type: string
+          description: 유저 이름
+        age:
+          type: number
+          description: 유저 나이
+        phone:
+          type: string
+          description: 핸드폰번호
+        email:
+          type: string
+          description: 이메일 주소
+        school:
+          properties:
+            name:
+              type: string
+              description: 학교 이름
+            major:
+              type: string
+              description: 전공
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+  #Examples
+  examples:
+    userExample:
+      value:
+        {
+          "id": "1",
+          "name": "홍길동",
+          "email": "swaggerTest@naver.com"
+        }
+  #Responses 재사용되는 애들
+  responses:
+    successResponse:
+        description: successful request with no data
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {"status": 200, "success": true, "message": "message"}
+    BadRequest:
+      description: 잘못된 요청
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            success: false
+            message: 잘못된 요청
+    InternalServerError:
+      description: 서버 에러
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            success: false
+            message: 서버 내부 오류
+#Paths api 경로 지정
+paths:
+  /login:
+    $ref: './login.yaml#/~1login'
