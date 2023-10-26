@@ -60,15 +60,16 @@ function create_user(user_info) {
 }
 
 router.post('/', (req, res) => {
-  const { Authorization } = req.headers;
-  if (Authorization) {
-    const jwt = Authorization.split(' ')[1];
-    const secret = process.env.SECRET_KEY;
+  const { authorization } = req.headers;
+  const secret = process.env.SECRET_KEY;
+  if (authorization) {
+    const jwt = authorization.split(' ')[1];
     const ret = jwtService.verifyToken(jwt, secret);
     if (ret.ok) {
       return res.status(200).json({
         code: 200,
-        message: 'token is valid'
+        message: 'token is valid',
+        access_token: jwt
       });
     }
   }
@@ -86,13 +87,12 @@ router.post('/', (req, res) => {
     return res.status(200).json({
       code: 200,
       message: 'token is created',
-      access_token: new_token,
-      refresh_token
+      access_token: new_token
     });
   }
   return res.status(401).json({
     code: 401,
-    message: 'refresh token is invalid'
+    message: 'token is invalid'
   });
 });
 
@@ -129,7 +129,7 @@ router.get('/redirect', async (req, res) => {
 
   const user_info = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
     headers: {
-      Authorization: `Bearer ${access_token}`
+      authorization: `Bearer ${access_token}`
     }
   });
   logger.info(user_info.data);
