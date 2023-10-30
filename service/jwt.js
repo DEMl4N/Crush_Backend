@@ -11,7 +11,7 @@ function accessToken(id, secret) {
   return jwt.sign(payload, secret, {
     // secret으로 sign하여 발급하고 return
     algorithm: 'HS256', // 암호화 알고리즘
-    expiresIn: '1h' // 유효기간
+    expiresIn: '15m' // 유효기간
   });
 }
 
@@ -20,8 +20,8 @@ function verifyToken(token, secret) {
     const decoded = jwt.verify(token, secret);
     return {
       ok: true,
-      id: decoded.id,
-      role: decoded.role
+      id: decoded.id
+      // role: decoded.role
     };
   } catch (err) {
     return {
@@ -31,8 +31,12 @@ function verifyToken(token, secret) {
   }
 }
 
-function refreshToken(token, secret) {
-  return jwt.sign({}, secret, {
+function refreshToken(id, secret) {
+  const payload = {
+    // refresh token에 들어갈 payload
+    id
+  };
+  return jwt.sign(payload, secret, {
     // refresh token은 payload 없이 발급
     algorithm: 'HS256',
     expiresIn: '14d'
