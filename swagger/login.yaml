@@ -11,18 +11,23 @@
           application/json:
             schema:
               type: object
-              example: {
-                "code": 200,
-                "message": "token is created",
-                "access_token": "new_token"
-              }
+              example: { 'code': 200, 'message': 'token is created', 'access_token': 'new_token' }
       '400':
         description: 잘못된 요청
         content:
           application/json:
             schema:
               type: object
-              example: {
-                "code": 401,
-                "message": 'refresh token is invalid'
-              }
+              example: { 'code': 401, 'message': 'refresh token is invalid' }
+
+/login/google:
+  get:
+    tags:
+      - Login
+    summary: 구글 OAuth 로그인
+    description: 구글 OAuth 로그인 페이지로 리다이렉트
+    responses:
+      '200':
+        description: 구글 OAuth 로그인 페이지로 리다이렉트
+      '400':
+        description: 잘못된 요청
