@@ -51,27 +51,22 @@ components:
   #Examples
   examples:
     userExample:
-      value:
-        {
-          "id": "1",
-          "name": "홍길동",
-          "email": "swaggerTest@naver.com"
-        }
+      value: { 'id': '1', 'name': '홍길동', 'email': 'swaggerTest@naver.com' }
   #Responses 재사용되는 애들
   responses:
     successResponse:
-        description: successful request with no data
-        content:
-          application/json:
-            schema:
-              type: object
-              example: {"status": 200, "success": true, "message": "message"}
+      description: successful request with no data
+      content:
+        application/json:
+          schema:
+            type: object
+            example: { 'status': 200, 'success': true, 'message': 'message' }
     BadRequest:
       description: 잘못된 요청
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             success: false
             message: 잘못된 요청
@@ -80,7 +75,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
           example:
             success: false
             message: 서버 내부 오류
@@ -88,3 +83,5 @@ components:
 paths:
   /login:
     $ref: './login.yaml#/~1login'
+  /login/google:
+    $ref: './login.yaml#/~1login~1google'
