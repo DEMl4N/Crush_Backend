@@ -3,7 +3,7 @@
     tags:
       - Login
     summary: 로그인 시도
-    description: 로그인 시도 API
+    description: JWT를 사용한 로그인 시도 API
     responses:
       '200':
         description: 로그인 성공
