@@ -4,6 +4,19 @@
       - Login
     summary: 로그인 시도
     description: JWT를 사용한 로그인 시도 API
+    parameters:
+      - name: authorization
+        in: header
+        description: JWT
+        schema:
+          type: string
+          format: JWT
+      - name: refresh_token
+        in: body
+        description: refresh token
+        schema:
+          type: object
+          example: { 'refresh_token': 'refresh_token' }
     responses:
       '200':
         description: 로그인 성공

@@ -3,61 +3,17 @@ const express = require('express');
 const axios = require('axios');
 const jwtService = require('../service/jwt');
 const logger = require('../config/logger');
+const loginService = require('../service/login');
+
 require('dotenv').config();
 
 const router = express.Router();
-// mongoose 불러오기
-const mongoose = require('../database/mongoose');
-// 스키마와 모델 구성
-const user_schema = new mongoose.Schema({
-  id: String,
-  name: String,
-  email: String
-});
-
-const user_model = mongoose.model('user', user_schema);
 
 // 테스트용 유저 데이터
 const users = [
   { id: 1, username: 'user1', password: '1234' },
   { id: 2, username: 'user2', password: '1234' }
 ];
-
-function find_user(id) {
-  const user = user_model
-    .findOne({
-      id
-    })
-    .then((isSuccessful) => {
-      if (isSuccessful) {
-        logger.info('find_user: ', isSuccessful);
-      }
-    })
-    .catch((error) => {
-      logger.error(error);
-      return null;
-    });
-  return user;
-}
-
-function create_user(user_info) {
-  const user = user_model
-    .create({
-      id: user_info.id,
-      name: user_info.name,
-      email: user_info.email
-    })
-    .then((isSuccessful) => {
-      if (isSuccessful) {
-        logger.info('create_user: ', isSuccessful);
-      }
-    })
-    .catch((error) => {
-      logger.error(error);
-      return null;
-    });
-  return user;
-}
 
 router.post('/', (req, res) => {
   const { authorization } = req.headers;
@@ -76,7 +32,7 @@ router.post('/', (req, res) => {
   const { refresh_token } = req.body;
   const refresh_ret = jwtService.verifyToken(refresh_token, secret);
   if (refresh_ret.ok) {
-    const user = find_user(refresh_ret.id);
+    const user = loginService.findUserById(refresh_ret.id);
     if (user == null) {
       return res.status(404).json({
         code: 404,
@@ -117,40 +73,48 @@ router.get('/google', (req, res) => {
 router.get('/redirect', async (req, res) => {
   const { code } = req.query;
   // access_token, refresh_token 등의 구글 토큰 정보 가져오기
-  const response_token = await axios.post('https://oauth2.googleapis.com/token', {
-    // x-www-form-urlencoded(body)
-    code,
-    client_id: process.env.GOOGLE_CLIENT_ID,
-    client_secret: process.env.GOOGLE_CLIENT_SECRET,
-    redirect_uri: process.env.REDIRECT_URI,
-    grant_type: 'authorization_code'
-  });
-  const { access_token } = response_token.data;
+  try {
+    const response_token = await axios.post('https://oauth2.googleapis.com/token', {
+      // x-www-form-urlencoded(body)
+      code,
+      client_id: process.env.GOOGLE_CLIENT_ID,
+      client_secret: process.env.GOOGLE_CLIENT_SECRET,
+      redirect_uri: process.env.REDIRECT_URI,
+      grant_type: 'authorization_code'
+    });
+    const { access_token } = response_token.data;
 
-  const user_info = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
-    headers: {
-      authorization: `Bearer ${access_token}`
+    const user_info = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+      headers: {
+        authorization: `Bearer ${access_token}`
+      }
+    });
+    logger.info(user_info.data);
+    // db에 유저 정보가 있는지 확인
+    let user = loginService.findUserById(user_info.data.id);
+    if (user == null) {
+      user = loginService.create_user(user_info.data);
     }
-  });
-  logger.info(user_info.data);
-  // db에 유저 정보가 있는지 확인
-  let user = find_user(user_info.data.id);
-  if (user == null) {
-    user = create_user(user_info.data);
+    logger.info('user: ', user);
+    // jwt 토큰 발급
+    const secret = process.env.SECRET_KEY;
+    // 받은 요청에서 db의 데이터를 가져온다 (로그인정보)
+    const token = jwtService.accessToken(user.id, secret);
+    const refresh_token = jwtService.refreshToken(user.id, secret);
+    // response
+    return res.status(200).contentType('application/json').json({
+      code: 200,
+      message: 'token is created',
+      access_token: token,
+      refresh_token
+    });
+  } catch (error) {
+    logger.error(error);
+    return res.status(400).json({
+      code: 400,
+      message: 'token is not created'
+    });
   }
-  logger.info('user: ', user);
-  // jwt 토큰 발급
-  const secret = process.env.SECRET_KEY;
-  // 받은 요청에서 db의 데이터를 가져온다 (로그인정보)
-  const token = jwtService.accessToken(user.id, secret);
-  const refresh_token = jwtService.refreshToken(user.id, secret);
-  // response
-  return res.status(200).contentType('application/json').json({
-    code: 200,
-    message: 'token is created',
-    access_token: token,
-    refresh_token
-  });
 });
 
 router.post('/test', (req, res) => {
