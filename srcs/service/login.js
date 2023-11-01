@@ -1,3 +1,6 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable consistent-return */
+/* eslint-disable no-new-object */
 /* eslint-disable camelcase */
 // mongoose 불러오기
 const mongoose = require('../database/mongoose');
@@ -14,42 +17,57 @@ const user_schema = new mongoose.Schema({
 
 const user_model = mongoose.model('user', user_schema);
 
-function findUserById(id) {
-  const user = user_model
+async function findUserById(id) {
+  let user = null;
+  user = await user_model
     .findOne({
       id
     })
     .then((isSuccessful) => {
       if (isSuccessful) {
         logger.info('find_user: ', isSuccessful);
+        const find_user = new Object();
+        find_user.id = isSuccessful._doc.id;
+        find_user.name = isSuccessful._doc.name;
+        find_user.email = isSuccessful._doc.email;
+        find_user.comment = isSuccessful._doc.comment;
+        logger.info('find_user2: ', find_user);
+        return find_user;
       }
     })
     .catch((error) => {
       logger.error(error);
-      return null;
     });
+  logger.info('find_user3: ', user);
   return user;
 }
 
-function findUserByNmae(name) {
-  const user = user_model
+async function findUserByNmae(name) {
+  let user = null;
+  user = await user_model
     .findOne({
       name
     })
     .then((isSuccessful) => {
       if (isSuccessful) {
         logger.info('find_user: ', isSuccessful);
+        const find_user = new Object();
+        find_user.id = isSuccessful._doc.id;
+        find_user.name = isSuccessful._doc.name;
+        find_user.email = isSuccessful._doc.email;
+        find_user.comment = isSuccessful._doc.comment;
+        return find_user;
       }
     })
     .catch((error) => {
       logger.error(error);
-      return null;
     });
   return user;
 }
 
-function create_user(user_info) {
-  const user = user_model
+async function create_user(user_info) {
+  let user = null;
+  user = await user_model
     .create({
       id: user_info.id,
       name: user_info.name,
@@ -59,34 +77,48 @@ function create_user(user_info) {
     .then((isSuccessful) => {
       if (isSuccessful) {
         logger.info('create_user: ', isSuccessful);
+        const find_user = new Object();
+        find_user.id = isSuccessful._doc.id;
+        find_user.name = isSuccessful._doc.name;
+        find_user.email = isSuccessful._doc.email;
+        find_user.comment = isSuccessful._doc.comment;
+        return find_user;
       }
     })
     .catch((error) => {
       logger.error(error);
-      return null;
     });
   return user;
 }
 
-function update_user(username, comment) {
-  const user = user_model
+async function update_user(id, username, comment) {
+  let user = null;
+  user = await user_model
     .findOneAndUpdate(
       {
-        name: username
+        id
       },
       {
         name: username,
         comment
+      },
+      {
+        new: true
       }
     )
     .then((isSuccessful) => {
       if (isSuccessful) {
         logger.info('update_user: ', isSuccessful);
+        const find_user = new Object();
+        find_user.id = isSuccessful._doc.id;
+        find_user.name = isSuccessful._doc.name;
+        find_user.email = isSuccessful._doc.email;
+        find_user.comment = isSuccessful._doc.comment;
+        return find_user;
       }
     })
     .catch((error) => {
       logger.error(error);
-      return null;
     });
   return user;
 }

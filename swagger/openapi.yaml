@@ -88,4 +88,6 @@ paths:
   /login/redirect:
     $ref: './login.yaml#/~1login~1redirect'
   /user/{username}:
-    $ref: './user.yaml#/~1user~1{username}'
+    $ref: './user.yaml#/~1user~1{user_name}'
+  /user/me:
+    $ref: './user.yaml#/~1user~1me'

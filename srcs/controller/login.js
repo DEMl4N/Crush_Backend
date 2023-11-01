@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const express = require('express');
 const axios = require('axios');
+const { log } = require('winston');
 const jwtService = require('../service/jwt');
 const logger = require('../config/logger');
 const loginService = require('../service/login');
@@ -89,11 +90,12 @@ router.get('/redirect', async (req, res) => {
         authorization: `Bearer ${access_token}`
       }
     });
-    logger.info(user_info.data);
+    logger.info('user_info: ', user_info.data);
     // db에 유저 정보가 있는지 확인
-    let user = loginService.findUserById(user_info.data.id);
+    let user = await loginService.findUserById(user_info.data.id);
     if (user == null) {
       user = loginService.create_user(user_info.data);
+      logger.info('create_user: ', user);
     }
     logger.info('user: ', user);
     // jwt 토큰 발급
