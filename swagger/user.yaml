@@ -1,4 +1,4 @@
-/user/{username}:
+/user/{user_name}:
   get:
     tags:
       - User
@@ -39,25 +39,54 @@
               type: object
               example: { 'code': 404, 'message': 'user not found' }
 
+/user/me:
+  get:
+    tags:
+      - User
+    summary: 내 정보 조회
+    description: 내 정보 조회 API
+    responses:
+      '200':
+        description: 내 정보 조회 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                {
+                  'code': 200,
+                  'message': 'user found',
+                  'user':
+                    {
+                      'id': 'id',
+                      'name': '홍길동',
+                      'email': 'email@naver.com',
+                      'comment': 'comment'
+                    }
+                }
+
   put:
     tags:
       - User
-    summary: 유저 정보 수정
-    description: 유저 정보 수정 API
-    parameters:
-      - name: username
-        in: path
-        description: 유저 이름
-        required: true
-        schema:
-          type: string
-          example: '홍길동'
-      - name: comment
-        in: body
-        description: 한줄 소개
-        schema:
-          type: object
-          example: '안녕하세요'
+    summary: 내 정보 수정
+    description: 내 정보 수정 API
+    requestBody:
+      x-name: body
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+              - user_name
+              - comment
+            properties:
+              user_name:
+                type: string
+              comment:
+                type: string
+          example:
+            user_name: '홍길동'
+            comment: '안녕하세요.'
     responses:
       '200':
         description: 유저 정보 수정 성공

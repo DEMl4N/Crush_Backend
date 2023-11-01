@@ -7,10 +7,10 @@ const cors = require('cors');
 
 // router 모듈 추가
 const YAML = require('yamljs');
-const indexRouter = require('./controller/index');
-const userRouter = require('./controller/user');
-const loginRouter = require('./controller/login');
-const dbTest = require('./controller/dbTest');
+const indexRouter = require('./srcs/controller/index');
+const userRouter = require('./srcs/controller/user');
+const loginRouter = require('./srcs/controller/login');
+const dbTest = require('./srcs/controller/dbTest');
 
 // swagger 설정 추가
 // eslint-disable-next-line import/order, import/no-extraneous-dependencies
