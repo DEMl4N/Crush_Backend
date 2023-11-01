@@ -18,6 +18,12 @@ function accessToken(id, secret) {
 function verifyToken(token, secret) {
   try {
     const decoded = jwt.verify(token, secret);
+    if (!decoded) {
+      return {
+        ok: false,
+        message: '토큰이 올바르지 않습니다.'
+      };
+    }
     return {
       ok: true,
       id: decoded.id
