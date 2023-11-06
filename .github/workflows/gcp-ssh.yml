@@ -25,12 +25,12 @@ jobs:
             git reset --hard origin/main
             git pull origin main
 
-            echo ${{ secrets.NODE_ENV}} > .env
-            echo ${{ secrets.MONGODB_URI}} >> .env
-            echo ${{ secrets.GOOGLE_CLIENT_ID}} >> .env
-            echo ${{ secrets.GOOGLE_CLIENT_SECRET}} >> .env
-            echo ${{ secrets.REDIRECT_URI}} >> .env
-            echo ${{ secrets.SECRET_KEY}} >> .env
+            echo "NODE_ENV=${{ secrets.NODE_ENV}}" > .env
+            echo "MONGODB_URI=${{ secrets.MONGODB_URI}}" >> .env
+            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID}}" >> .env
+            echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET}}" >> .env
+            echo "REDIRECT_URI=${{ secrets.REDIRECT_URI}}" >> .env
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY}}" >> .env
 
             if [ "$(docker ps -aq -f name=nodejs)" ]
             then
@@ -41,6 +41,6 @@ jobs:
             else
               echo "[ nodejs is not running ]"
               echo "[ run nodejs ]"
-              docker build -t crush .
             fi
+            docker build -t crush .
             docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs --env-file ./.env -v /home/minskim3/Crush_Backend:/backend crush
