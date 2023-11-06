@@ -10,6 +10,7 @@ const YAML = require('yamljs');
 const indexRouter = require('./srcs/controller/index');
 const userRouter = require('./srcs/controller/user');
 const loginRouter = require('./srcs/controller/login');
+const playlistRouter = require('./srcs/controller/playlists');
 const dbTest = require('./srcs/controller/dbTest');
 
 // swagger 설정 추가
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/login', loginRouter);
+app.use('/playlists', playlistRouter);
 app.use('/dbTest', dbTest);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
