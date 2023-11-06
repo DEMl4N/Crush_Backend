@@ -11,8 +11,17 @@ router.get('/', async (req, res) => {
   // 토큰 인증 및 유저 아이디 가져오기
   const userID = "Test";
   const playlists = await playlistService.findPlaylistsByUserId(userID);
-
-  return res.send("A");
+  console.log(playlists);
+  return res.json({
+    playlists: [
+      {
+        A: "A"
+      },
+      {
+        B: "B"
+      }
+    ]
+  });
 });
 
 /* Create a playlist */
@@ -21,7 +30,7 @@ router.post('/', async (req, res) => {
   const userID = "Test";
   const { playlistName } = req.body;
   const playlist = await playlistService.createNewPlaylist(userID, playlistName);
-  
+  console.log(playlist);
   return res.send("B");
 });
 

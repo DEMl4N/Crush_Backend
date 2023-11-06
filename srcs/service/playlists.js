@@ -49,14 +49,15 @@ const findPlaylistsByUserId = async (userID) => {
   .then((isSuccessful) => {
     if (isSuccessful) {
       logger.info(`find_playlists by ${userID}: ${isSuccessful}`);
+      return isSuccessful;
     }
+
+    return undefined;
   })
   .catch((error) => {
     logger.error(error);
     return undefined;
   });
-
-  return playlists;
 };
 
 const findMusicsByPlaylistObjectId = async (playlistObjectID) => {
