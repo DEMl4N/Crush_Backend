@@ -1,7 +1,7 @@
 /playlists/{playlistId}/musics:
   post:
     tags:
-      - Music
+      - Musics
     summary: 음악 추가
     description: 특정 플레이리스트에 음악 추가 API
     parameters:

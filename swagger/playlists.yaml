@@ -1,7 +1,7 @@
 /playlists:
   post:
     tags:
-      - Playlist
+      - Playlists
     summary: 플레이리스트 생성
     description: 내 계정에 플레이리스트 생성 API
     requestedBody:
@@ -34,7 +34,7 @@
               example: { 'code': 401, 'message': 'something is wrong' }
   get:
     tags:
-      - Playlist
+      - Playlists
     summary: 내 플레이리스트 조회
     description: 내 계정의 플레이리스트 목록 조회 API
     responses:
