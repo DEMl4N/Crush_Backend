@@ -25,14 +25,22 @@ jobs:
             git reset --hard origin/main
             git pull origin main
 
+            echo ${{ secrets.NODE_ENV}} > .env
+            echo ${{ secrets.MONGODB_URI}} >> .env
+            echo ${{ secrets.GOOGLE_CLIENT_ID}} >> .env
+            echo ${{ secrets.GOOGLE_CLIENT_SECRET}} >> .env
+            echo ${{ secrets.REDIRECT_URI}} >> .env
+            echo ${{ secrets.SECRET_KEY}} >> .env
+
             if [ "$(docker ps -aq -f name=nodejs)" ]
             then
               echo "[ nodejs is running ]"
               echo "[ restart nodejs ]"
-              docker restart nodejs
+              docker stop nodejs
+              docker rm nodejs
             else
               echo "[ nodejs is not running ]"
               echo "[ run nodejs ]"
               docker build -t crush .
-              docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs -v /home/minskim3/Crush_Backend:/backend crush
             fi
+            docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs --env-file ./.env -v /home/minskim3/Crush_Backend:/backend crush
