@@ -91,3 +91,7 @@ paths:
     $ref: './user.yaml#/~1user~1{user_name}'
   /user/me:
     $ref: './user.yaml#/~1user~1me'
+  /playlists:
+    $ref: './playlists.yaml#/~1playlists'
+  /playlists/{playlistID}/musics:
+    $ref: './musics.yaml#/~1playlists~1{playlistId}~1musics'

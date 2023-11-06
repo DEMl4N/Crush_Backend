@@ -1,0 +1,83 @@
+/playlists/{playlistId}/musics:
+  post:
+    tags:
+      - Music
+    summary: 음악 추가
+    description: 특정 플레이리스트에 음악 추가 API
+    parameters:
+      - name: playlistId
+        in: path
+        description: 플레이리스트 ID
+        required: true
+        schema:
+          type: string
+          example: '6548fa0a09cda1e357e5a015'
+    requestedBody:
+      x-name: body
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+              - musicName
+              - artist
+              - url
+            properties:
+              musicName:
+                type: string
+              artist:
+                type: string
+              url:
+                type: string
+          example:
+            musicName: 'Plastic Love'
+            artist: 'Takeuchi Mariya'
+            url: 'https://www.youtube.com/watch?v=u6y5NSiRPOw'
+    responses:
+      '200':
+        description: 플레이리스트에 음악 추가 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { 'code': 200, 'message': 'music added' }
+      '400':
+        description: 잘못된 요청
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { 'code': 401, 'message': 'something is wrong' }
+  get:
+    tags:
+      - Musics
+    summary: 음악 가져오기
+    description: 특정 플레이리스트의 모든 음악 조회 API
+    parameters:
+      - name: playlistId
+        in: path
+        description: 플레이리스트 ID
+        required: true
+        schema:
+          type: string
+          example: '6548fa0a09cda1e357e5a015'
+    responses:
+      '200':
+        description: 플레이리스트 생성 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: 
+                { 
+                  'code': 200, 
+                  'message': 'music found', 
+                  'musics': [{ 'musicName': '음악 이름', 'artist': '가수 이름', 'url': '링크1' }, { 'musicName': '7f019340a39cda1ea039ba001', 'artist': 'HEAVY&METAL', 'url': '링크1' }] 
+                }
+      '400':
+        description: 잘못된 요청
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { 'code': 401, 'message': 'something is wrong' }
