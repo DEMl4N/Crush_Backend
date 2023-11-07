@@ -40,7 +40,12 @@ app.use('/playlists', playlistRouter);
 app.use('/dbTest', dbTest);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000', `${process.env.SERVER_HOST}`],
+    credentials: true
+  })
+);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

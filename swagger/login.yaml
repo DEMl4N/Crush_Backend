@@ -46,7 +46,7 @@
         description: 잘못된 요청
 
 /login/redirect:
-  post:
+  get:
     tags:
       - Login
     summary: 구글 OAuth 로그인 리다이렉트
