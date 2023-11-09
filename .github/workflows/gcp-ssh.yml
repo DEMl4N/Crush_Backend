@@ -33,8 +33,8 @@ jobs:
             echo "SECRET_KEY=${{ secrets.SECRET_KEY}}" >> .env
             echo "SERVER_HOST=${{ secrets.SERVER_HOST}}" >> .env
             echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID}}" >> .env
-            echo "CGS_BUCKET=${{ secrets.CGS_BUCKET}}" >> .env
-            echo "CGS_KEYFILE_PATH=${{ secrets.CGS_KEYFILE_PATH}}" >> .env
+            echo "GCS_BUCKET=${{ secrets.GCS_BUCKET}}" >> .env
+            echo "GCS_KEYFILE_PATH=${{ secrets.GCS_KEYFILE_PATH}}" >> .env
 
             if [ "$(docker ps -aq -f name=nodejs)" ]
             then
