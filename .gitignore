@@ -6,3 +6,4 @@ build/
 logs/
 
 swagger-output.json
+gcs-key.json

@@ -95,3 +95,11 @@ paths:
     $ref: './playlists.yaml#/~1playlists'
   /playlists/{playlistID}/musics:
     $ref: './musics.yaml#/~1playlists~1{playlistId}~1musics'
+  /image/all:
+    $ref: './image.yaml#/~1image~1all'
+  /image/{id}:
+    $ref: './image.yaml#/~1image~1{id}'
+  /image/upload:
+    $ref: './image.yaml#/~1image~1upload'
+  /image/delete/{id}:
+    $ref: './image.yaml#/~1image~1delete~1{id}'
