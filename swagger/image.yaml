@@ -1,0 +1,79 @@
+/image/all:
+  get:
+    tags:
+      - Image
+    summary: 이미지 전체 조회
+    description: 이미지 전체를 조회합니다.
+    responses:
+      '200':
+        description: 이미지 전체 조회 성공
+      '400':
+        description: 잘못된 요청
+      '500':
+        description: 서버 오류
+
+/image/{id}:
+  get:
+    tags:
+      - Image
+    summary: 이미지 조회
+    description: 이미지를 조회합니다.
+    parameters:
+      - name: id
+        in: path
+        description: 이미지 ID
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 이미지 조회 성공
+      '400':
+        description: 잘못된 요청
+      '500':
+        description: 서버 오류
+
+/image/upload:
+  post:
+    tags:
+      - Image
+    summary: 이미지 업로드
+    description: 이미지를 업로드합니다.
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              image:
+                type: string
+                format: binary
+    responses:
+      '200':
+        description: 이미지 업로드 성공
+      '400':
+        description: 잘못된 요청
+      '500':
+        description: 서버 오류
+
+/image/delete/{id}:
+  delete:
+    tags:
+      - Image
+    summary: 이미지 삭제
+    description: 이미지를 삭제합니다.
+    parameters:
+      - name: id
+        in: path
+        description: 이미지 ID
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: 이미지 삭제 성공
+      '400':
+        description: 잘못된 요청
+      '500':
+        description: 서버 오류

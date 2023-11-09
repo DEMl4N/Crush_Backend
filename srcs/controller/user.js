@@ -79,7 +79,7 @@ router.put('/me', async (req, res) => {
 router.get('/:user_name', async (req, res) => {
   try {
     const { user_name } = req.params;
-    const user = await loginService.findUserByNmae(user_name);
+    const user = await loginService.findUserByName(user_name);
     if (user == null) {
       res.status(404).json({
         code: 404,
