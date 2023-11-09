@@ -1,24 +1,9 @@
 const express = require('express');
-const Multer = require('multer');
 const imageService = require('../service/image');
+const multer = require('../config/multer');
 require('dotenv').config();
 
 const router = express.Router();
-
-const { Storage } = require('@google-cloud/storage');
-
-// Instantiate a storage client
-const storage = new Storage({
-  projectId: process.env.GCP_PROJECT_ID,
-  keyFilename: process.env.GCS_KEYFILE_PATH
-});
-
-const multer = Multer({
-  storage: Multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
-  }
-});
 
 router.get('/all', async (req, res) => {
   const images = await imageService.findAllImages();
@@ -35,7 +20,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Process the file upload and upload to Google Cloud Storage.
-router.post('/upload', multer.single('image'), async (req, res, next) => {
+router.post('/upload', multer.single('image'), async (req, res) => {
   if (!req.file) {
     res.status(400).send('No file uploaded.');
     return;

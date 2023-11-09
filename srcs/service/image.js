@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable no-array-constructor */
 /* eslint-disable new-cap */
 /* eslint-disable consistent-return */
@@ -13,19 +14,11 @@ require('dotenv').config();
 const { Storage } = require('@google-cloud/storage');
 
 const { format } = require('util');
-const Multer = require('multer');
 
 // Instantiate a storage client
 const storage = new Storage({
   projectId: process.env.GCP_PROJECT_ID,
   keyFilename: process.env.GCS_KEYFILE_PATH
-});
-
-const multer = Multer({
-  storage: Multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
-  }
 });
 
 // A bucket is a container for objects (files).

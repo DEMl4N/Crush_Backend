@@ -3,6 +3,7 @@ const express = require('express');
 const loginService = require('../service/login');
 const jwtService = require('../service/jwt');
 const logger = require('../config/logger');
+const multer = require('../config/multer');
 
 const router = express.Router();
 
@@ -40,7 +41,7 @@ router.get('/me', async (req, res) => {
   }
 });
 
-router.put('/me', async (req, res) => {
+router.put('/me', multer.single('image'), async (req, res) => {
   logger.info('req.body: ', req.body.user_name);
   try {
     const token = req.headers.authorization.split(' ')[1];
