@@ -42,7 +42,7 @@ async function findUserById(id) {
   return user;
 }
 
-async function findUserByNmae(name) {
+async function findUserByName(name) {
   let user = null;
   user = await user_model
     .findOne({
@@ -125,7 +125,7 @@ async function update_user(id, username, comment) {
 
 module.exports = {
   findUserById,
-  findUserByNmae,
+  findUserByName,
   create_user,
   update_user
 };

@@ -12,6 +12,7 @@ const userRouter = require('./srcs/controller/user');
 const loginRouter = require('./srcs/controller/login');
 const playlistRouter = require('./srcs/controller/playlists');
 const dbTest = require('./srcs/controller/dbTest');
+const imageRouter = require('./srcs/controller/image');
 
 // swagger 설정 추가
 // eslint-disable-next-line import/order, import/no-extraneous-dependencies
@@ -38,9 +39,15 @@ app.use('/user', userRouter);
 app.use('/login', loginRouter);
 app.use('/playlists', playlistRouter);
 app.use('/dbTest', dbTest);
+app.use('/image', imageRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'http://localhost:8080', `${process.env.SERVER_HOST}`],
+    credentials: true
+  })
+);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
