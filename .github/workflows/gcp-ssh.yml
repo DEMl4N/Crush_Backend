@@ -47,4 +47,4 @@ jobs:
               echo "[ run nodejs ]"
             fi
             docker build -t crush .
-            docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs --env-file ./.env -v /home/minskim3/Crush_Backend:/backend crush
+            docker run -d -p ${{ secrets.NODE_PORT }}:${{ secrets.NODE_PORT}} --name nodejs --restart always --env-file ./.env -v /home/minskim3/Crush_Backend:/backend crush
