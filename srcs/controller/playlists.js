@@ -1,6 +1,7 @@
 const express = require('express');
 const loginService = require('../service/login');
 const playlistService = require('../service/playlists');
+const jwtService = require('../service/jwt');
 
 const router = express.Router();
 
@@ -9,29 +10,79 @@ const router = express.Router();
 /* GET every playlist of the user */
 router.get('/', async (req, res) => {
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
-  const playlists = await playlistService.findPlaylistsByUserId(userID);
+  const token = req.headers.authorization.split(' ')[1];
+  const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
+
+  if (!verify_ret.ok) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  const user = await loginService.findUserById(verify_ret.id);
+
+  if (user == null) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  const playlists = await playlistService.findPlaylistsByUserId(verify_ret.id);
   console.log(playlists);
+
+  if (playlists === undefined) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+  
   return res.json({
-    playlists: [
-      {
-        A: "A"
-      },
-      {
-        B: "B"
-      }
-    ]
+    code: 200,
+    message: "playlists found",
+    playlists: playlists
   });
 });
 
 /* Create a playlist */
 router.post('/', async (req, res) => {
-  // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  // 토큰 인증 및 유저 아이디 가져오기  
+  const token = req.headers.authorization.split(' ')[1];
+  const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
+
+  if (!verify_ret.ok) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  const user = await loginService.findUserById(verify_ret.id);
+
+  if (user == null) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
   const { playlistName } = req.body;
-  const playlist = await playlistService.createNewPlaylist(userID, playlistName);
+  const playlist = await playlistService.createNewPlaylist(verify_ret.id, playlistName);
   console.log(playlist);
-  return res.send("B");
+
+  if (playlist === undefined) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  return res.json({
+    code: 200,
+    message: "playlist created"
+  });
 });
 
 /* Modify the playlist info */
@@ -53,23 +104,80 @@ router.delete('/:playlistId', async (req, res) => {
 
 /* GET musics in the playlist */
 router.get('/:playlistId/musics', async (req, res) => {
-  // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  // 토큰 인증 및 유저 아이디 가져오기 
+  const token = req.headers.authorization.split(' ')[1];
+  const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
+
+  if (!verify_ret.ok) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  const user = await loginService.findUserById(verify_ret.id);
+
+  if (user == null) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
   const playlistObjectID = req.params.playlistId;
   const musics = await playlistService.findMusicsByPlaylistObjectId(playlistObjectID);
 
-  return res.send("E");
+  if (musics === undefined) {
+    return res.json({
+      code: 401,
+      message: "somthing is wrong"
+    });
+  }
+
+  return res.json({
+    code: 200,
+    message: "musics found",
+    musics: musics
+  });
 });
 
 /* Add new music to the playlist */
 router.post('/:playlistId/musics', async (req, res) => {
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const token = req.headers.authorization.split(' ')[1];
+  const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
+
+  if (!verify_ret.ok) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  const user = await loginService.findUserById(verify_ret.id);
+
+  if (user == null) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
   const playlistObjectID = req.params.playlistId;
   const { musicName, artist, url } = req.body;
-  const music = await playlistService.addNewMusic(userID, playlistObjectID, musicName, artist, url);
+  const music = await playlistService.addNewMusic(verify_ret.id, playlistObjectID, musicName, artist, url);
 
-  return res.send("F");
+  if (music === undefined) {
+    return res.json({
+      code: 401,
+      message: "somthing is wrong"
+    });
+  }
+
+  return res.json({
+    code: 200,
+    message: "music added"
+  });
 });
 
 /* Delete a music in the playlist */

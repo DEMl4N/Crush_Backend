@@ -14,6 +14,13 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  imageUrl: {
+    type: String
+  },
+  numberOfMusics: {
+    type: Number,
+    default: 0
+  }
 });
 
 const playlistModel = mongoose.model('playlist', playlistSchema);
@@ -47,12 +54,22 @@ const findPlaylistsByUserId = async (userID) => {
     userID: userID
   })
   .then((isSuccessful) => {
-    if (isSuccessful) {
-      logger.info(`find_playlists by ${userID}: ${isSuccessful}`);
-      return isSuccessful;
+    if (!isSuccessful) {
+      return undefined;
     }
 
-    return undefined;
+    logger.info(`find_playlists by ${userID}: ${isSuccessful}`);
+
+    const playlists = []
+    isSuccessful.forEach((playlist) => {
+      playlists.push({
+        playlistID: playlist._id,
+        playlistName: playlist.name,
+        numberOfMusics: playlist.numberOfMusics
+      })
+    })
+
+    return playlists;
   })
   .catch((error) => {
     logger.error(error);
@@ -65,16 +82,26 @@ const findMusicsByPlaylistObjectId = async (playlistObjectID) => {
     playlistID: mongoose.Types.ObjectId(playlistObjectID)
   })
   .then((isSuccessful) => {
-    if (isSuccessful) {
-      logger.info(`find_musics in ${playlistObjectID} by ${userID}: ${isSuccessful}`);
+    if (!isSuccessful) {
+      return undefined;
     }
+    logger.info(`find_musics in ${playlistObjectID} by ${userID}: ${isSuccessful}`);
+
+    const musics = []
+    isSuccessful.forEach((music) => {
+      musics.push({
+        musicName: music.name,
+        artist: music.artist,
+        url: music.url
+      })
+    })
+
+    return musics;
   })
   .catch((error) => {
     logger.error(error);
     return undefined;
   });
-
-  return musics;
 };
 
 const createNewPlaylist = async (userID, playlistName) => {
