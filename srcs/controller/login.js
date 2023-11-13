@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 const express = require('express');
 const axios = require('axios');
+const { v4: uuidv4 } = require('uuid');
 const { log } = require('winston');
 const jwtService = require('../service/jwt');
 const logger = require('../config/logger');
