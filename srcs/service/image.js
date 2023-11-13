@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable no-array-constructor */
 /* eslint-disable new-cap */
 /* eslint-disable consistent-return */
@@ -13,19 +14,11 @@ require('dotenv').config();
 const { Storage } = require('@google-cloud/storage');
 
 const { format } = require('util');
-const Multer = require('multer');
 
 // Instantiate a storage client
 const storage = new Storage({
   projectId: process.env.GCP_PROJECT_ID,
   keyFilename: process.env.GCS_KEYFILE_PATH
-});
-
-const multer = Multer({
-  storage: Multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
-  }
 });
 
 // A bucket is a container for objects (files).
@@ -87,37 +80,34 @@ async function findImageById(_id) {
   return image;
 }
 
-async function createImage(file, res) {
+async function createImage(file, filename) {
   // Create a new blob in the bucket and upload the file data.
-  const uuid = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
-  const blob = bucket.file(uuid + file.originalname);
+  const blob = bucket.file(filename);
   const blobStream = blob.createWriteStream();
 
-  blobStream.on('finish', async () => {
-    // The public URL can be used to directly access the file via HTTP.
-    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
-    image_model
-      .create({
-        name: blob.name,
-        url: publicUrl
-      })
-      .then((isSuccessful) => {
-        if (isSuccessful) {
-          logger.info('create_image: ', isSuccessful);
-          const create_image = new Object();
-          create_image.id = isSuccessful._doc._id;
-          create_image.name = blob.name;
-          create_image.url = publicUrl;
-          res.status(200).send(create_image);
-        }
-      })
-      .catch((error) => {
-        logger.error(error);
-        res.status(500).send(error);
-      });
-  });
+  const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+  const new_image = await image_model
+    .create({
+      name: blob.name,
+      url: publicUrl
+    })
+    .then((isSuccessful) => {
+      if (isSuccessful) {
+        logger.info('create_image: ', isSuccessful);
+        const create_image = new Object();
+        create_image.id = isSuccessful._doc._id;
+        create_image.name = blob.name;
+        create_image.url = publicUrl;
+        return create_image;
+      }
+    })
+    .catch((error) => {
+      logger.error(error);
+      throw new Error(error);
+    });
 
   blobStream.end(file.buffer);
+  return new_image;
 }
 
 async function deleteImageById(_id) {
