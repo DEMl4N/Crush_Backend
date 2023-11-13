@@ -9,10 +9,10 @@ const logger = require('../config/logger');
 
 // 스키마와 모델 구성
 const user_schema = new mongoose.Schema({
-  id: String,
   name: String,
   email: String,
-  comment: String
+  comment: String,
+  profile_image_id: String
 });
 
 const user_model = mongoose.model('user', user_schema);
@@ -31,6 +31,7 @@ async function findUserById(id) {
         find_user.name = isSuccessful._doc.name;
         find_user.email = isSuccessful._doc.email;
         find_user.comment = isSuccessful._doc.comment;
+        find_user.profile_image_id = isSuccessful._doc.profile_image_id;
         logger.info('find_user2: ', find_user);
         return find_user;
       }
@@ -56,6 +57,7 @@ async function findUserByName(name) {
         find_user.name = isSuccessful._doc.name;
         find_user.email = isSuccessful._doc.email;
         find_user.comment = isSuccessful._doc.comment;
+        find_user.profile_image_id = isSuccessful._doc.profile_image_id;
         return find_user;
       }
     })
@@ -82,6 +84,7 @@ async function create_user(user_info) {
         find_user.name = isSuccessful._doc.name;
         find_user.email = isSuccessful._doc.email;
         find_user.comment = isSuccessful._doc.comment;
+        find_user.profile_image_id = isSuccessful._doc.profile_image_id;
         return find_user;
       }
     })
@@ -91,8 +94,9 @@ async function create_user(user_info) {
   return user;
 }
 
-async function update_user(id, username, comment) {
+async function update_user(id, username, comment, profile_image_id) {
   let user = null;
+  logger.info('update_user1: ', id, username, comment, profile_image_id);
   user = await user_model
     .findOneAndUpdate(
       {
@@ -100,7 +104,8 @@ async function update_user(id, username, comment) {
       },
       {
         name: username,
-        comment
+        comment,
+        profile_image_id
       },
       {
         new: true
@@ -114,6 +119,7 @@ async function update_user(id, username, comment) {
         find_user.name = isSuccessful._doc.name;
         find_user.email = isSuccessful._doc.email;
         find_user.comment = isSuccessful._doc.comment;
+        find_user.profile_image_id = isSuccessful._doc.profile_image_id;
         return find_user;
       }
     })

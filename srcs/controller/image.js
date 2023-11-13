@@ -1,4 +1,5 @@
 const express = require('express');
+const { v4: uuidv4 } = require('uuid');
 const imageService = require('../service/image');
 const multer = require('../config/multer');
 require('dotenv').config();
@@ -26,7 +27,9 @@ router.post('/upload', multer.single('image'), async (req, res) => {
     return;
   }
   try {
-    await imageService.createImage(req.file, res);
+    const uuid = uuidv4();
+    const filename = uuid + req.file.originalname;
+    await imageService.createImage(req.file, filename, res);
   } catch (err) {
     res.status(500).send('Post Controller Error');
   }

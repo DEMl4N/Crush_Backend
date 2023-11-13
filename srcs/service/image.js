@@ -80,37 +80,34 @@ async function findImageById(_id) {
   return image;
 }
 
-async function createImage(file, res) {
+async function createImage(file, filename) {
   // Create a new blob in the bucket and upload the file data.
-  const uuid = uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
-  const blob = bucket.file(uuid + file.originalname);
+  const blob = bucket.file(filename);
   const blobStream = blob.createWriteStream();
 
-  blobStream.on('finish', async () => {
-    // The public URL can be used to directly access the file via HTTP.
-    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
-    image_model
-      .create({
-        name: blob.name,
-        url: publicUrl
-      })
-      .then((isSuccessful) => {
-        if (isSuccessful) {
-          logger.info('create_image: ', isSuccessful);
-          const create_image = new Object();
-          create_image.id = isSuccessful._doc._id;
-          create_image.name = blob.name;
-          create_image.url = publicUrl;
-          res.status(200).send(create_image);
-        }
-      })
-      .catch((error) => {
-        logger.error(error);
-        res.status(500).send(error);
-      });
-  });
+  const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+  const new_image = await image_model
+    .create({
+      name: blob.name,
+      url: publicUrl
+    })
+    .then((isSuccessful) => {
+      if (isSuccessful) {
+        logger.info('create_image: ', isSuccessful);
+        const create_image = new Object();
+        create_image.id = isSuccessful._doc._id;
+        create_image.name = blob.name;
+        create_image.url = publicUrl;
+        return create_image;
+      }
+    })
+    .catch((error) => {
+      logger.error(error);
+      throw new Error(error);
+    });
 
   blobStream.end(file.buffer);
+  return new_image;
 }
 
 async function deleteImageById(_id) {
