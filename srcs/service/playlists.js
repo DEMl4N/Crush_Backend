@@ -87,6 +87,7 @@ const findMusicsByPlaylistObjectId = async (playlistObjectID) => {
     const musics = []
     isSuccessful.forEach((music) => {
       musics.push({
+        musicID: music._id,
         musicName: music.name,
         artist: music.artist,
         url: music.url
