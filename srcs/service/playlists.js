@@ -46,9 +46,6 @@ const musicSchema = new mongoose.Schema({
 
 const musicModel = mongoose.model('music', musicSchema);
 
-
-
-
 const findPlaylistsByUserId = async (userID) => {
   const playlists = await playlistModel.find({
     userID: userID
@@ -125,7 +122,7 @@ const createNewPlaylist = async (userID, playlistName) => {
 const addNewMusic = async (userID, playlistObjectID, musicName, artist, url) => {
   const isValid = await playlistModel.findOne({
     userID: userID,
-    _id: playlistID,
+    _id: mongoose.Types.ObjectId(playlistObjectID),
   })
   .then((isSuccessful) => {
     if (isSuccessful === undefined) {
@@ -156,10 +153,63 @@ const addNewMusic = async (userID, playlistObjectID, musicName, artist, url) => 
   return newMusic;
 };
 
+const deletePlaylist = async (userID, playlistObjectID) => {
+  const isDeleted = await playlistModel.deleteOne({
+    userID: userID,
+    _id: mongoose.Types.ObjectId(playlistObjectID)
+  })
+  .then((isSuccessful) => {
+    if (isSuccessful === undefined) {
+      return undefined;
+    }
+
+    logger.info(`delete playlist ${playlistObjectID} by ${userID}`);
+    return isSuccessful;
+  })
+  .catch((error) => {
+    logger.error(error);
+    return undefined;
+  })
+}
+
+const deleteMusic = async (userID, playlistObjectID, musicID) => {
+  const isOwned = await playlistModel.findOne({
+    userID: userID,
+    _id: mongoose.Types.ObjectId(playlistObjectID)
+  })
+  .then((isSuccessful) => {
+    if (isSuccessful === undefined) {
+      return undefined;
+    }
+  })
+  .catch((error) => {
+    logger.error(error)
+    return undefined
+  })
+
+  const isDeleted = await musicModel.deleteOne({
+    _id: musicID,
+    playlistID: mongoose.Types.ObjectId(playlistObjectID)
+  })
+  .then((isSuccessful) => {
+    if (isSuccessful === undefined) {
+      return undefined;
+    }
+
+    logger.info(`delete playlist ${playlistObjectID} by ${userID}`);
+    return isSuccessful
+  })
+  .catch((error) => {
+    logger.error(error);
+    return undefined;
+  })
+}
 
 module.exports = {
   findPlaylistsByUserId,
   findMusicsByPlaylistObjectId,
   createNewPlaylist,
-  addNewMusic
+  addNewMusic,
+  deletePlaylist,
+  deleteMusic
 };

@@ -5,8 +5,6 @@ const jwtService = require('../service/jwt');
 
 const router = express.Router();
 
-// app.use('/musics', musicRouter);
-
 /* GET every playlist of the user */
 router.get('/', async (req, res) => {
   // 토큰 인증 및 유저 아이디 가져오기
@@ -96,9 +94,29 @@ router.put('/:playlistId', async (req, res) => {
 /* Delelte the playlist */
 router.delete('/:playlistId', async (req, res) => {
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const token = req.headers.authorization.split(' ')[1];
+  const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
 
-  return res.send("D");
+  if (!verify_ret.ok) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  const isDeleted = await playlistService.deletePlaylist(verify_ret.id, req.params.playlistId);
+
+  if (isDeleted === undefined) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  return res.json({
+    code: 200,
+    message: "playlist deleted"
+  });
 });
 
 
@@ -183,8 +201,29 @@ router.post('/:playlistId/musics', async (req, res) => {
 /* Delete a music in the playlist */
 router.delete('/:playlistId/musics/:musicId', async (req, res) => {
   // 토큰 인증 및 유저 아이디 가져오기
+  const token = req.headers.authorization.split(' ')[1];
+  const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
 
-  return res.send("G");
+  if (!verify_ret.ok) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  const isDeleted = await playlistService.deleteMusic(verify_ret.id, req.params.playlistId, req.params.musicId);
+
+  if (isDeleted === undefined) {
+    return res.status(401).json({
+      code: 401,
+      message: "something is wrong"
+    });
+  }
+
+  return res.json({
+    code: 200,
+    message: "playlist deleted"
+  });
 });
 
 module.exports = router;
