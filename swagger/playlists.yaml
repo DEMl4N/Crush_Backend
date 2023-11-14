@@ -51,11 +51,13 @@
                   'playlists': [
                     { 
                       'playlistID': "6548fa0a09cda1e357e5a015", 
-                      'playlistName': "집 가고 싶을 때 들을 거" 
+                      'playlistName': "집 가고 싶을 때 들을 거",
+                      'numberOfMusics': '20'
                     }, 
                     { 
                       'playlistID': "7f019340a39cda1ea039ba001", 
-                      'playlistName': "HEAVY&METAL" 
+                      'playlistName': "HEAVY&METAL",
+                      'numberOfMusics': '7'
                     }
                   ] 
                 }
