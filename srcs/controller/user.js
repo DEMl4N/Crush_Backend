@@ -51,6 +51,13 @@ router.put('/me', multer.single('image'), async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
     const { user_name, comment } = req.body;
+    if (user_name == null || user_name === '') {
+      res.status(400).json({
+        code: 400,
+        message: 'user_name is null'
+      });
+      return;
+    }
     if (verify_ret.ok) {
       let filename = null;
       let image = null;
