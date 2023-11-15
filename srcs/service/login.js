@@ -12,7 +12,8 @@ const user_schema = new mongoose.Schema({
   name: String,
   email: String,
   comment: String,
-  profile_image_id: String
+  profile_image_id: String,
+  background_image_id: String
 });
 
 const user_model = mongoose.model('user', user_schema);
@@ -120,6 +121,41 @@ async function update_user(id, username, comment, profile_image_id) {
         find_user.email = isSuccessful._doc.email;
         find_user.comment = isSuccessful._doc.comment;
         find_user.profile_image_id = isSuccessful._doc.profile_image_id;
+        find_user.background_image_id = isSuccessful._doc.background_image_id;
+        return find_user;
+      }
+    })
+    .catch((error) => {
+      logger.error(error);
+    });
+  return user;
+}
+
+async function update_background(id, background_image_id) {
+  let user = null;
+  logger.info('update_background1: ', id, background_image_id);
+  user = await user_model
+    .findOneAndUpdate(
+      {
+        id
+      },
+      {
+        background_image_id
+      },
+      {
+        new: true
+      }
+    )
+    .then((isSuccessful) => {
+      if (isSuccessful) {
+        logger.info('update_background: ', isSuccessful);
+        const find_user = new Object();
+        find_user.id = isSuccessful._doc.id;
+        find_user.name = isSuccessful._doc.name;
+        find_user.email = isSuccessful._doc.email;
+        find_user.comment = isSuccessful._doc.comment;
+        find_user.profile_image_id = isSuccessful._doc.profile_image_id;
+        find_user.background_image_id = isSuccessful._doc.background_image_id;
         return find_user;
       }
     })
@@ -133,5 +169,6 @@ module.exports = {
   findUserById,
   findUserByName,
   create_user,
-  update_user
+  update_user,
+  update_background
 };
