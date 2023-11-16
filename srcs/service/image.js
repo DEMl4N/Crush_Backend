@@ -94,11 +94,11 @@ async function createImage(file, filename) {
     .then((isSuccessful) => {
       if (isSuccessful) {
         logger.info('create_image: ', isSuccessful);
-        const create_image = new Object();
-        create_image.id = isSuccessful._doc._id;
-        create_image.name = blob.name;
-        create_image.url = publicUrl;
-        return create_image;
+        // const create_image = new Object();
+        // create_image.id = isSuccessful._doc._id;
+        // create_image.name = blob.name;
+        // create_image.url = publicUrl;
+        return isSuccessful;
       }
     })
     .catch((error) => {
@@ -159,4 +159,4 @@ async function deleteImageById(_id) {
   return image;
 }
 
-module.exports = { findAllImages, findImageById, createImage, deleteImageById };
+module.exports = { findAllImages, findImageById, createImage, deleteImageById, image_schema, image_model };

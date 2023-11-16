@@ -1,9 +1,12 @@
 /* eslint-disable camelcase */
 // mongoose 불러오기
 const mongoose = require('../database/mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 const logger = require('../config/logger');
 const { log } = require('winston');
+
+const imageService = require('../service/image');
 
 const playlistSchema = new mongoose.Schema({
   userID: {
@@ -14,8 +17,8 @@ const playlistSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  imageUrl: {
-    type: String
+  thumbnail: {
+    type: imageService.image_schema
   },
   numberOfMusics: {
     type: Number,
@@ -57,12 +60,13 @@ const findPlaylistsByUserId = async (userID) => {
 
     logger.info(`find_playlists by ${userID}: ${isSuccessful}`);
 
-    const playlists = []
+    const playlists = [];
     isSuccessful.forEach((playlist) => {
       playlists.push({
         playlistID: playlist._id,
         playlistName: playlist.name,
-        numberOfMusics: playlist.numberOfMusics
+        numberOfMusics: playlist.numberOfMusics,
+        thumbnailUrl: playlist.thumbnail.url
       })
     })
 
@@ -102,14 +106,27 @@ const findMusicsByPlaylistObjectId = async (playlistObjectID) => {
   });
 };
 
-const createNewPlaylist = async (userID, playlistName) => {
+const createNewPlaylist = async (userID, playlistName, imageFile) => {
+  let playlistImage = undefined
+
+  if (imageFile) {
+    const uuid = uuidv4();
+    const filename = uuid + imageFile.originalname;
+    playlistImage = await imageService.createImage(imageFile, filename)
+    .catch((error) => {
+      return undefined;
+    });
+  }
+  
   const newPlaylist = await playlistModel.create({
     userID: userID,
-    name: playlistName
+    name: playlistName,
+    thumbnail: playlistImage
   })
   .then((isSuccessful) => {
     if (isSuccessful) {
       logger.info(`playlist created ${isSuccessful}`);
+      return newPlaylist;
     }
   })
   .catch((error) => {

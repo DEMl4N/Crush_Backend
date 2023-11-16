@@ -1,7 +1,11 @@
 const express = require('express');
+const { v4: uuidv4 } = require('uuid');
 const loginService = require('../service/login');
 const playlistService = require('../service/playlists');
 const jwtService = require('../service/jwt');
+const imageService = require('../service/image');
+const multer = require('../config/multer');
+require('dotenv').config();
 
 const router = express.Router();
 
@@ -45,7 +49,7 @@ router.get('/', async (req, res) => {
 });
 
 /* Create a playlist */
-router.post('/', async (req, res) => {
+router.post('/', multer.sigle('image'), async (req, res) => {
   // 토큰 인증 및 유저 아이디 가져오기  
   const token = req.headers.authorization.split(' ')[1];
   const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
