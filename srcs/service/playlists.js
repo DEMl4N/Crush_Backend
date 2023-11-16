@@ -191,6 +191,8 @@ const deletePlaylist = async (userID, playlistObjectID) => {
 }
 
 const deleteMusic = async (userID, playlistObjectID, musicID) => {
+  const imageName = undefined;
+
   const isOwned = await playlistModel.findOne({
     userID: userID,
     _id: mongoose.Types.ObjectId(playlistObjectID)
@@ -199,6 +201,7 @@ const deleteMusic = async (userID, playlistObjectID, musicID) => {
     if (isSuccessful === undefined) {
       return undefined;
     }
+    imageName = isSuccessful.thumbnail.name;
   })
   .catch((error) => {
     logger.error(error)
@@ -213,14 +216,20 @@ const deleteMusic = async (userID, playlistObjectID, musicID) => {
     if (isSuccessful === undefined) {
       return undefined;
     }
-
     logger.info(`delete playlist ${playlistObjectID} by ${userID}`);
-    return isSuccessful
   })
   .catch((error) => {
     logger.error(error);
     return undefined;
-  })
+  });
+
+  const blob = bucket.file(imageName);
+  if (blob == null) {
+    return undefined;
+  }
+  blob.delete();
+  
+  return isDeleted;
 }
 
 module.exports = {

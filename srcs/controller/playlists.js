@@ -71,7 +71,7 @@ router.post('/', multer.sigle('image'), async (req, res) => {
   }
 
   const { playlistName } = req.body;
-  const playlist = await playlistService.createNewPlaylist(verify_ret.id, playlistName);
+  const playlist = await playlistService.createNewPlaylist(verify_ret.id, playlistName, req.file);
   console.log(playlist);
 
   if (playlist === undefined) {
