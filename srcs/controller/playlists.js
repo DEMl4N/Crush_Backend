@@ -8,17 +8,19 @@ const router = express.Router();
 
 /* GET every playlist of the user */
 router.get('/', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const userID = 'Test';
   const playlists = await playlistService.findPlaylistsByUserId(userID);
   console.log(playlists);
   return res.json({
     playlists: [
       {
-        A: "A"
+        A: 'A'
       },
       {
-        B: "B"
+        B: 'B'
       }
     ]
   });
@@ -26,57 +28,68 @@ router.get('/', async (req, res) => {
 
 /* Create a playlist */
 router.post('/', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const userID = 'Test';
   const { playlistName } = req.body;
   const playlist = await playlistService.createNewPlaylist(userID, playlistName);
   console.log(playlist);
-  return res.send("B");
+  return res.send('B');
 });
 
 /* Modify the playlist info */
 router.put('/:playlistId', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const userID = 'Test';
 
-  return res.send("C");
+  return res.send('C');
 });
 
 /* Delelte the playlist */
 router.delete('/:playlistId', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const userID = 'Test';
 
-  return res.send("D");
+  return res.send('D');
 });
-
 
 /* GET musics in the playlist */
 router.get('/:playlistId/musics', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const userID = 'Test';
   const playlistObjectID = req.params.playlistId;
   const musics = await playlistService.findMusicsByPlaylistObjectId(playlistObjectID);
 
-  return res.send("E");
+  return res.send('E');
 });
 
 /* Add new music to the playlist */
 router.post('/:playlistId/musics', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const userID = 'Test';
   const playlistObjectID = req.params.playlistId;
   const { musicName, artist, url } = req.body;
   const music = await playlistService.addNewMusic(userID, playlistObjectID, musicName, artist, url);
 
-  return res.send("F");
+  return res.send('F');
 });
 
 /* Delete a music in the playlist */
 router.delete('/:playlistId/musics/:musicId', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
 
-  return res.send("G");
+  return res.send('G');
 });
 
 module.exports = router;

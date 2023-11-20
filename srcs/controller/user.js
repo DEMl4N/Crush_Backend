@@ -10,6 +10,8 @@ const logger = require('../config/logger');
 const router = express.Router();
 
 router.get('/me', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   try {
     const token = req.headers.authorization.split(' ')[1];
     const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
@@ -56,6 +58,8 @@ router.get('/me', async (req, res) => {
 });
 
 router.put('/me', multer.single('image'), async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   logger.info('req.body: ', req.body.user_name);
   try {
     const token = req.headers.authorization.split(' ')[1];
@@ -112,6 +116,8 @@ router.put('/me', multer.single('image'), async (req, res) => {
 });
 
 router.put('/me/background', multer.single('image'), async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   try {
     const token = req.headers.authorization.split(' ')[1];
     const verify_ret = jwtService.verifyToken(token, process.env.SECRET_KEY);
@@ -159,6 +165,8 @@ router.put('/me/background', multer.single('image'), async (req, res) => {
 
 /* GET users listing. */
 router.get('/:user_name', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   try {
     const { user_name } = req.params;
     const user = await loginService.findUserByName(user_name);

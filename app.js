@@ -34,13 +34,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.use('/', indexRouter);
-app.use('/user', userRouter);
-app.use('/login', loginRouter);
-app.use('/playlists', playlistRouter);
-app.use('/dbTest', dbTest);
-app.use('/image', imageRouter);
+app.use('/api/user', userRouter);
+app.use('/api/login', loginRouter);
+app.use('/api/playlists', playlistRouter);
+app.use('/api/dbTest', dbTest);
+app.use('/api/image', imageRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/', indexRouter);
 
 const whitelist = ['http://localhost:8080', 'http://localhost:3000', `${process.env.SERVER_HOST}`];
 

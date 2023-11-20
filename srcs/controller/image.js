@@ -7,11 +7,15 @@ require('dotenv').config();
 const router = express.Router();
 
 router.get('/all', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   const images = await imageService.findAllImages();
   res.status(200).send(images);
 });
 
 router.get('/:id', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   const image = await imageService.findImageById(req.params.id);
   if (image == null) {
     res.status(404).send('DB Image not found');
@@ -22,6 +26,8 @@ router.get('/:id', async (req, res) => {
 
 // Process the file upload and upload to Google Cloud Storage.
 router.post('/upload', multer.single('image'), async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   if (!req.file) {
     res.status(400).send('No file uploaded.');
     return;
@@ -36,6 +42,8 @@ router.post('/upload', multer.single('image'), async (req, res) => {
 });
 
 router.delete('/delete/:id', async (req, res, next) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   try {
     const image = await imageService.deleteImageById(req.params.id);
     if (image == null) {
