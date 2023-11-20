@@ -16,7 +16,16 @@ router.get('/me', async (req, res) => {
     if (verify_ret.ok) {
       logger.info('verify_ret: ', verify_ret);
       const user = await loginService.findUserById(verify_ret.id);
-      const image = await imageService.findImageById(user.profile_image_id);
+      const profile_image = await imageService.findImageById(user.profile_image_id);
+      let profile_url = null;
+      if (profile_image != null) {
+        profile_url = profile_image.url;
+      }
+      const background_image = await imageService.findImageById(user.background_image_id);
+      let background_url = null;
+      if (background_image != null) {
+        background_url = background_image.url;
+      }
       logger.info('user: ', user);
       if (user == null) {
         res.status(404).json({
@@ -28,7 +37,8 @@ router.get('/me', async (req, res) => {
           code: 200,
           message: 'user found',
           user,
-          url: image.url
+          profile_url,
+          background_url
         });
       }
     } else {

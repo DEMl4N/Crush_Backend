@@ -33,6 +33,7 @@ async function findUserById(id) {
         find_user.email = isSuccessful._doc.email;
         find_user.comment = isSuccessful._doc.comment;
         find_user.profile_image_id = isSuccessful._doc.profile_image_id;
+        find_user.background_image_id = isSuccessful._doc.background_image_id;
         logger.info('find_user2: ', find_user);
         return find_user;
       }
@@ -59,6 +60,7 @@ async function findUserByName(name) {
         find_user.email = isSuccessful._doc.email;
         find_user.comment = isSuccessful._doc.comment;
         find_user.profile_image_id = isSuccessful._doc.profile_image_id;
+        find_user.background_image_id = isSuccessful._doc.background_image_id;
         return find_user;
       }
     })

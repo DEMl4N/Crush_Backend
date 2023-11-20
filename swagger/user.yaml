@@ -108,7 +108,57 @@
                       'id': 'id',
                       'name': '홍길동',
                       'email': 'example@naver.com',
-                      'comment': 'comment'
+                      'comment': 'comment',
+                      'image': 'image',
+                      'background': 'background'
+                    }
+                }
+      '400':
+        description: 잘못된 요청
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { 'code': 400, 'message': '올바르지 않은 요청입니다.' }
+
+/user/me/background:
+  put:
+    tags:
+      - User
+    summary: 배경화면 수정
+    description: 배경화면 수정 API
+    requestBody:
+      x-name: body
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            required:
+              - image
+            properties:
+              image:
+                type: string
+                format: binary
+    responses:
+      '200':
+        description: 배경화면 수정 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                {
+                  'code': 200,
+                  'message': 'background updated',
+                  'user':
+                    {
+                      'id': 'id',
+                      'name': '홍길동',
+                      'email': 'example@naver.com',
+                      'comment': 'comment',
+                      'image': 'image',
+                      'background': 'background'
                     }
                 }
       '400':

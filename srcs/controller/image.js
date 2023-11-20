@@ -27,9 +27,9 @@ router.post('/upload', multer.single('image'), async (req, res) => {
     return;
   }
   try {
-    const uuid = uuidv4();
-    const filename = uuid + req.file.originalname;
-    await imageService.createImage(req.file, filename, res);
+    const filename = uuidv4() + req.file.originalname;
+    const image = await imageService.createImage(req.file, filename);
+    res.status(200).send(image);
   } catch (err) {
     res.status(500).send('Post Controller Error');
   }

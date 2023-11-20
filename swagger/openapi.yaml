@@ -8,6 +8,7 @@ info:
 servers:
   - url: http://localhost:8080/
   - url: http://34.64.96.158:8080/
+  - url: http://mymylist.ddns.net:8080/
 security:
   - bearerAuth: []
 components:
@@ -91,6 +92,8 @@ paths:
     $ref: './user.yaml#/~1user~1{user_name}'
   /user/me:
     $ref: './user.yaml#/~1user~1me'
+  /user/me/background:
+    $ref: './user.yaml#/~1user~1me~1background'
   /playlists:
     $ref: './playlists.yaml#/~1playlists'
   /playlists/{playlistID}/musics:
