@@ -51,14 +51,45 @@
                   'playlists': [
                     { 
                       'playlistID': "6548fa0a09cda1e357e5a015", 
-                      'playlistName': "집 가고 싶을 때 들을 거" 
+                      'playlistName': "집 가고 싶을 때 들을 거",
+                      'numberOfMusics': '20'
                     }, 
                     { 
                       'playlistID': "7f019340a39cda1ea039ba001", 
-                      'playlistName': "HEAVY&METAL" 
+                      'playlistName': "HEAVY&METAL",
+                      'numberOfMusics': '7'
                     }
                   ] 
                 }
+      '400':
+        description: 잘못된 요청
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { 'code': 401, 'message': 'something is wrong' }
+/playlists/{playlistId}:
+  delete:
+    tags:
+      - Playlists
+    summary: 플레이리스트 삭제
+    description: 특정 플레이리스트 삭제 API
+    parameters:
+      - name: playlistId
+        in: path
+        description: 플레이리스트 ID
+        required: true
+        schema:
+          type: string
+          example: '6548fa0a09cda1e357e5a015'
+    responses:
+      '200':
+        description: 플레이리스트 삭제 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { 'code': 200, 'message': 'playlist deleted' }
       '400':
         description: 잘못된 요청
         content:
