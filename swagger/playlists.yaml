@@ -82,7 +82,7 @@
         schema:
           type: string
           example: '6548fa0a09cda1e357e5a015'
-    response:
+    responses:
       '200':
         description: 플레이리스트 삭제 성공
         content:

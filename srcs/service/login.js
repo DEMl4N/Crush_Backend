@@ -6,6 +6,7 @@
 const mongoose = require('../database/mongoose');
 
 const logger = require('../config/logger');
+const jwtService = require('../service/jwt');
 
 // 스키마와 모델 구성
 const user_schema = new mongoose.Schema({
@@ -129,9 +130,45 @@ async function update_user(id, username, comment, profile_image_id) {
   return user;
 }
 
+const checkUser = async (headers, secretKey) => {
+  try {
+    const token = headers.authorization.split(' ')[1];
+    const verify_ret = jwtService.verifyToken(token, secretKey);
+
+    if (!verify_ret.ok) {
+      return {
+        ok: false,
+        id: undefined
+      };
+    }
+
+    const user = await loginService.findUserById(verify_ret.id);
+
+    if (user == null) {
+      return {
+        ok: false,
+        id: undefined
+      };
+    }
+
+    return {
+      ok: verify_ret.ok,
+      id: verify_ret.id
+    };
+  }
+  catch (error) {
+    logger.error(error);
+    return {
+      ok: false,
+      id: undefined
+    };;
+  }
+}
+
 module.exports = {
   findUserById,
   findUserByName,
   create_user,
-  update_user
+  update_user,
+  checkUser
 };
