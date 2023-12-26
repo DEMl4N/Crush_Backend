@@ -65,7 +65,7 @@ const findPlaylistsByUserId = async (userID) => {
         playlistID: playlist._id.toString(),
         playlistName: playlist.name,
         numberOfMusics: playlist.numberOfMusics,
-        thumbnailUrl: playlist.thumbnail.url
+        thumbnailUrl: playlist.thumbnail !== undefined ? playlist.thumbnail.url : ""
       };
     });
 
@@ -79,25 +79,24 @@ const findPlaylistsByUserId = async (userID) => {
   return playlists;
 };
 
-const findMusicsByPlaylistObjectId = async (playlistObjectID) => {
-  const musics = await musicModel.find({
+const findMusicsByPlaylistObjectId = async (userID, playlistObjectID) => {
+  const musiclist = await musicModel.find({
     playlistID: new mongoose.Types.ObjectId(playlistObjectID)
   })
   .then((isSuccessful) => {
     if (!isSuccessful) {
-      return undefined;
+      return [];
     }
     logger.info(`find_musics in ${playlistObjectID} by ${userID}: ${isSuccessful}`);
 
-    const musics = []
-    isSuccessful.forEach((music) => {
-      musics.push({
+    const musics = isSuccessful.map((music) => {
+      return {
         musicID: music._id.toString(),
         musicName: music.name,
         artist: music.artist,
         url: music.url
-      })
-    })
+      };
+    });
 
     return musics;
   })
@@ -105,6 +104,8 @@ const findMusicsByPlaylistObjectId = async (playlistObjectID) => {
     logger.error(error);
     return undefined;
   });
+
+  return musiclist;
 };
 
 const createNewPlaylist = async (userID, playlistName, imageFile) => {
@@ -208,15 +209,16 @@ const deleteMusic = async (userID, playlistObjectID, musicID) => {
     _id: new mongoose.Types.ObjectId(playlistObjectID)
   })
   .then((isSuccessful) => {
-    if (isSuccessful === undefined) {
-      return undefined;
-    }
-    imageName = isSuccessful.thumbnail.name;
+    return isSuccessful;
   })
   .catch((error) => {
     logger.error(error)
-    return undefined
+    return undefined;
   })
+
+  if (isOwned === undefined) {
+    return undefined;
+  }
 
   const isDeleted = await musicModel.deleteOne({
     _id: musicID,
@@ -226,20 +228,13 @@ const deleteMusic = async (userID, playlistObjectID, musicID) => {
     if (isSuccessful === undefined) {
       return undefined;
     }
-    logger.info(`delete playlist ${playlistObjectID} by ${userID}`);
+    logger.info(`delete music ${musicID} in ${playlistObjectID} by ${userID}`);
+    return isSuccessful;
   })
   .catch((error) => {
     logger.error(error);
     return undefined;
   });
-
-  if (imageName !== undefined) {
-    const blob = bucket.file(imageName);
-    if (blob == null) {
-      return undefined;
-    }
-    blob.delete();
-  }
   
   return isDeleted;
 }
