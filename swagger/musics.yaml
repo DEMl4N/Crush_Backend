@@ -40,7 +40,7 @@
           application/json:
             schema:
               type: object
-              example: { 'code': 200, 'message': 'music added' }
+              example: { 'code': 200, 'message': 'music added', 'musicId': '658a7195bfbbcb7ba29e5526' }
       '400':
         description: 잘못된 요청
         content:
@@ -63,7 +63,7 @@
           example: '6548fa0a09cda1e357e5a015'
     responses:
       '200':
-        description: 플레이리스트 생성 성공
+        description: 플레이리스트의 음악 조회 성공
         content:
           application/json:
             schema:
@@ -72,8 +72,44 @@
                 { 
                   'code': 200, 
                   'message': 'music found', 
-                  'musics': [{ 'musicName': '음악 이름', 'artist': '가수 이름', 'url': '링크1' }, { 'musicName': '7f019340a39cda1ea039ba001', 'artist': 'HEAVY&METAL', 'url': '링크1' }] 
+                  'musics': [{ 'musicId': 'e4561a09bda1e9642a002', 'musicName': '음악 이름', 'artist': '가수 이름', 'url': '링크1' }, { 'musicId': '7f019340a39cda1ea039ba001', 'musicName': '육군가', 'artist': '대한민국 육군', 'url': '링크2' }] 
                 }
+      '400':
+        description: 잘못된 요청
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { 'code': 401, 'message': 'something is wrong' }
+/playlists/{playlistId}/musics/{musicId}:
+  delete:
+    tags:
+      - Musics
+    summary: 음악 삭제
+    description: 플레이리스트 내부 특정 음악 삭제 API
+    parameters:
+      - name: playlistId
+        in: path
+        description: 플레이리스트 ID
+        required: true
+        schema:
+          type: string
+          example: '6548fa0a09cda1e357e5a015'
+      - name: musicId
+        in: path
+        description: 뮤직 ID
+        required: true
+        schema:
+          type: string
+          example: '658a7584f27e9565879105d2'
+    responses:
+      '200':
+        description: 음악 삭제 성공
+        content:
+          application/json:
+            schema:
+              type: object
+              example: { 'code': 200, 'message': 'music deleted' }
       '400':
         description: 잘못된 요청
         content:

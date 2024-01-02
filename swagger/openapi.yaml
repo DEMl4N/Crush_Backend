@@ -96,8 +96,12 @@ paths:
     $ref: './user.yaml#/~1user~1me~1background'
   /api/playlists:
     $ref: './playlists.yaml#/~1playlists'
-  /api/playlists/{playlistID}/musics:
+  /playlists/{playlistId}:
+    $ref: './playlists.yaml#/~1playlists~1{playlistId}'
+  /playlists/{playlistId}/musics:
     $ref: './musics.yaml#/~1playlists~1{playlistId}~1musics'
+  /playlists/{playlistId}/musics/{musicId}:
+    $ref: './musics.yaml#/~1playlists~1{playlistId}~1musics~1{musicId}'
   /api/image/all:
     $ref: './image.yaml#/~1image~1all'
   /api/image/{id}:
