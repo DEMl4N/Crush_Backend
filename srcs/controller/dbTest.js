@@ -15,6 +15,8 @@ const testSchema = new mongoose.Schema({
 const testModel = mongoose.model('dbTest', testSchema);
 
 router.get('/:testValue', (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   testModel
     .findOne({
       testKey: req.params.testValue

@@ -10,6 +10,8 @@ const router = express.Router();
 
 /* GET every playlist of the user */
 router.get('/', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
   const loginInfo = await loginService.checkUser(req.headers, process.env.SECRET_KEY);
 
@@ -49,6 +51,7 @@ router.post('/', multer.single('image'), async (req, res) => {
     });
   }
 
+
   const { playlistName } = req.body;
   const playlist = await playlistService.createNewPlaylist(loginInfo.id, playlistName, req.file);
   // const playlist = await playlistService.createNewPlaylist("brandnewworld", playlistName, req.file);
@@ -70,14 +73,18 @@ router.post('/', multer.single('image'), async (req, res) => {
 
 /* Modify the playlist info */
 router.put('/:playlistId', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
-  const userID = "Test";
+  const userID = 'Test';
 
-  return res.send("C");
+  return res.send('C');
 });
 
 /* Delelte the playlist */
 router.delete('/:playlistId', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
   const loginInfo = await loginService.checkUser(req.headers, process.env.SECRET_KEY);
 
@@ -103,7 +110,6 @@ router.delete('/:playlistId', async (req, res) => {
     message: "playlist deleted"
   });
 });
-
 
 /* GET musics in the playlist */
 router.get('/:playlistId/musics', async (req, res) => {
@@ -137,6 +143,8 @@ router.get('/:playlistId/musics', async (req, res) => {
 
 /* Add new music to the playlist */
 router.post('/:playlistId/musics', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
   const loginInfo = await loginService.checkUser(req.headers, process.env.SECRET_KEY);
 
@@ -167,6 +175,8 @@ router.post('/:playlistId/musics', async (req, res) => {
 
 /* Delete a music in the playlist */
 router.delete('/:playlistId/musics/:musicId', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   // 토큰 인증 및 유저 아이디 가져오기
   const loginInfo = await loginService.checkUser(req.headers, process.env.SECRET_KEY);
 

@@ -18,6 +18,8 @@ const users = [
 ];
 
 router.post('/', (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   const { authorization } = req.headers;
   const secret = process.env.SECRET_KEY;
   if (authorization) {
@@ -55,6 +57,8 @@ router.post('/', (req, res) => {
 });
 
 router.get('/google', (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   let url = 'https://accounts.google.com/o/oauth2/v2/auth';
   // client_id는 위 스크린샷을 보면 발급 받았음을 알 수 있음
   // 단, 스크린샷에 있는 ID가 아닌 당신이 직접 발급 받은 ID를 사용해야 함.
@@ -73,6 +77,8 @@ router.get('/google', (req, res) => {
 
 // redirect 되었을 때 로그인 또는 회원가입해서 jwt 토큰 발급
 router.get('/redirect', async (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   const { code } = req.query;
   // access_token, refresh_token 등의 구글 토큰 정보 가져오기
   try {
@@ -121,6 +127,8 @@ router.get('/redirect', async (req, res) => {
 });
 
 router.post('/test', (req, res) => {
+  res.setHeader('Access-Control-Allow-origin', '*');
+  res.setHeader('Access-Control-Allow-Credentials', 'true'); // 쿠키 주고받기 허용
   //  #swagger.tags = ['Login']
   //  #swagger.description = '로그인 테스트'
   /*  #swagger.parameters['test'] = {

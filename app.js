@@ -34,20 +34,28 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.use('/', indexRouter);
-app.use('/user', userRouter);
-app.use('/login', loginRouter);
-app.use('/playlists', playlistRouter);
-app.use('/dbTest', dbTest);
-app.use('/image', imageRouter);
+app.use('/api/user', userRouter);
+app.use('/api/login', loginRouter);
+app.use('/api/playlists', playlistRouter);
+app.use('/api/dbTest', dbTest);
+app.use('/api/image', imageRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/', indexRouter);
 
-app.use(
-  cors({
-    origin: ['http://localhost:3000', 'http://localhost:8080', `${process.env.SERVER_HOST}`],
-    credentials: true
-  })
-);
+const whitelist = ['http://localhost:8080', 'http://localhost:3000', `${process.env.SERVER_HOST}`];
+
+const corsOptions = {
+  origin(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      // 만일 whitelist 배열에 origin인자가 있을 경우
+      callback(null, true); // cors 허용
+    } else {
+      callback(new Error('Not Allowed Origin!')); // cors 비허용
+    }
+  }
+};
+
+app.use(cors(corsOptions)); // 옵션을 추가한 CORS 미들웨어 추가
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

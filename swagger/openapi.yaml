@@ -8,6 +8,7 @@ info:
 servers:
   - url: http://localhost:8080/
   - url: http://34.64.96.158:8080/
+  - url: http://mymylist.ddns.net:8080/
 security:
   - bearerAuth: []
 components:
@@ -81,17 +82,19 @@ components:
             message: 서버 내부 오류
 #Paths api 경로 지정
 paths:
-  /login:
+  /api/login:
     $ref: './login.yaml#/~1login'
-  /login/google:
+  /api/login/google:
     $ref: './login.yaml#/~1login~1google'
-  /login/redirect:
+  /api/login/redirect:
     $ref: './login.yaml#/~1login~1redirect'
-  /user/{username}:
+  /api/user/{username}:
     $ref: './user.yaml#/~1user~1{user_name}'
-  /user/me:
+  /api/user/me:
     $ref: './user.yaml#/~1user~1me'
-  /playlists:
+  /api/user/me/background:
+    $ref: './user.yaml#/~1user~1me~1background'
+  /api/playlists:
     $ref: './playlists.yaml#/~1playlists'
   /playlists/{playlistId}:
     $ref: './playlists.yaml#/~1playlists~1{playlistId}'
@@ -99,11 +102,11 @@ paths:
     $ref: './musics.yaml#/~1playlists~1{playlistId}~1musics'
   /playlists/{playlistId}/musics/{musicId}:
     $ref: './musics.yaml#/~1playlists~1{playlistId}~1musics~1{musicId}'
-  /image/all:
+  /api/image/all:
     $ref: './image.yaml#/~1image~1all'
-  /image/{id}:
+  /api/image/{id}:
     $ref: './image.yaml#/~1image~1{id}'
-  /image/upload:
+  /api/image/upload:
     $ref: './image.yaml#/~1image~1upload'
-  /image/delete/{id}:
+  /api/image/delete/{id}:
     $ref: './image.yaml#/~1image~1delete~1{id}'
